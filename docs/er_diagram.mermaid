@@ -1,0 +1,257 @@
+erDiagram
+    %% Users and Authentication
+    User {
+        int id PK
+        string username UK
+        string email UK
+        string first_name
+        string last_name
+        text bio
+        string github_username
+        string linkedin_profile
+        int total_points
+        int problems_solved
+        boolean is_superuser
+        boolean is_staff
+        boolean is_active
+        datetime date_joined
+        datetime created_at
+        datetime updated_at
+    }
+
+    UserProfile {
+        int id PK
+        int user_id FK
+        string preferred_language
+        string skill_level
+        string location
+        string website
+        boolean is_public
+        datetime created_at
+        datetime updated_at
+    }
+
+    %% Categories and Classification
+    Category {
+        int id PK
+        string name UK
+        string slug UK
+        text description
+        string icon
+        string color
+        boolean is_active
+        int order
+        datetime created_at
+        datetime updated_at
+    }
+
+    Tag {
+        int id PK
+        string name UK
+        string slug UK
+        text description
+        string color
+        datetime created_at
+        datetime updated_at
+    }
+
+    Difficulty {
+        int id PK
+        string name UK
+        int level UK
+        string color
+        int points
+    }
+
+    %% Questions
+    Question {
+        int id PK
+        string title
+        string slug UK
+        text description
+        text problem_statement
+        text input_format
+        text output_format
+        text constraints
+        int category_id FK
+        int difficulty_id FK
+        int created_by_id FK
+        json hints
+        int time_limit
+        int memory_limit
+        boolean is_active
+        boolean is_premium
+        int total_submissions
+        int successful_submissions
+        datetime created_at
+        datetime updated_at
+    }
+
+    TestCase {
+        int id PK
+        int question_id FK
+        text input_data
+        text expected_output
+        boolean is_sample
+        boolean is_hidden
+        int points
+        text explanation
+        datetime created_at
+        datetime updated_at
+    }
+
+    QuestionExample {
+        int id PK
+        int question_id FK
+        text input_example
+        text output_example
+        text explanation
+        int order
+        datetime created_at
+        datetime updated_at
+    }
+
+    %% Many-to-Many: Question Tags
+    QuestionTag {
+        int id PK
+        int question_id FK
+        int tag_id FK
+    }
+
+    %% Submissions
+    Submission {
+        int id PK
+        int user_id FK
+        int question_id FK
+        text code
+        string language
+        string status
+        float execution_time
+        int memory_used
+        int points_earned
+        int passed_test_cases
+        int total_test_cases
+        text error_message
+        datetime created_at
+        datetime updated_at
+    }
+
+    SubmissionResult {
+        int id PK
+        int submission_id FK
+        int test_case_id FK
+        string status
+        float execution_time
+        int memory_used
+        text output
+        text error_message
+        datetime created_at
+        datetime updated_at
+    }
+
+    %% Progress Tracking
+    UserProgress {
+        int id PK
+        int user_id FK
+        int question_id FK
+        string status
+        int attempts
+        int best_submission_id FK
+        int points_earned
+        datetime first_solved_at
+        datetime created_at
+        datetime updated_at
+    }
+
+    %% Achievements
+    Achievement {
+        int id PK
+        string name
+        text description
+        string icon
+        string color
+        int required_problems_solved
+        int required_points
+        int required_streak
+        int required_category_id FK
+        datetime created_at
+        datetime updated_at
+    }
+
+    UserAchievement {
+        int id PK
+        int user_id FK
+        int achievement_id FK
+        datetime earned_at
+        datetime created_at
+        datetime updated_at
+    }
+
+    %% Discussions
+    Discussion {
+        int id PK
+        int question_id FK
+        int author_id FK
+        string title
+        text content
+        boolean is_pinned
+        boolean is_locked
+        int views
+        datetime created_at
+        datetime updated_at
+    }
+
+    DiscussionReply {
+        int id PK
+        int discussion_id FK
+        int author_id FK
+        text content
+        int parent_id FK
+        int upvotes
+        int downvotes
+        datetime created_at
+        datetime updated_at
+    }
+
+    Vote {
+        int id PK
+        int user_id FK
+        int reply_id FK
+        string vote_type
+        datetime created_at
+        datetime updated_at
+    }
+
+    %% Relationships
+    User ||--|| UserProfile : "has profile"
+    User ||--o{ Question : "creates"
+    User ||--o{ Submission : "submits"
+    User ||--o{ UserProgress : "tracks progress"
+    User ||--o{ UserAchievement : "earns"
+    User ||--o{ Discussion : "starts"
+    User ||--o{ DiscussionReply : "replies"
+    User ||--o{ Vote : "votes"
+
+    Category ||--o{ Question : "categorizes"
+    Category ||--o{ Achievement : "category-specific"
+    Difficulty ||--o{ Question : "has difficulty"
+    
+    Question ||--o{ TestCase : "has test cases"
+    Question ||--o{ QuestionExample : "has examples"
+    Question ||--o{ Submission : "receives"
+    Question ||--o{ UserProgress : "tracked for"
+    Question ||--o{ Discussion : "discussed in"
+    Question }o--o{ Tag : "tagged with"
+
+    Tag }o--o{ Question : "tags"
+
+    Submission ||--o{ SubmissionResult : "produces results"
+    Submission ||--o{ UserProgress : "best submission"
+    
+    TestCase ||--o{ SubmissionResult : "tested against"
+
+    Achievement ||--o{ UserAchievement : "earned as"
+
+    Discussion ||--o{ DiscussionReply : "has replies"
+    DiscussionReply ||--o{ DiscussionReply : "nested replies"
+    DiscussionReply ||--o{ Vote : "receives votes"

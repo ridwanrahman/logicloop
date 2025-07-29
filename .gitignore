@@ -1,6 +1,7 @@
 # Django + PyCharm + macOS .gitignore
 
 .idea/
+.DS_Store
 
 # Django specific
 *.log
