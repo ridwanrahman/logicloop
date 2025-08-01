@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # third party apps
-    'django-htmx',
+    # 'django-htmx',
 
     # local apps
     'ninja',
