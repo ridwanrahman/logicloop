@@ -9,7 +9,12 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
+from django.conf.global_settings import CSRF_TRUSTED_ORIGINS
+from dotenv import load_dotenv
 
+load_dotenv()
+
+import os
 import sys
 from pathlib import Path
 
@@ -24,13 +29,21 @@ sys.path.insert(0, str(BASE_DIR / 'apps'))
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-5*jq&sg8^*0c8w-c$l6o(4i#@l#)3h3)-1&%@0*kd^z126$m87'
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DJANGO_DEBUG")
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    ".railway.app"
+]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.railway.app",
+]
+
+if DEBUG:
+    ALLOWED_HOSTS = ['*']
 
 # Application definition
 

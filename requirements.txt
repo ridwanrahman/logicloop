@@ -2,3 +2,4 @@ Django==5.2.4
 Faker==37.4.2
 django-ninja==1.4.3
 django-htmx==1.23.2
+python-dotenv
