@@ -27,11 +27,6 @@ api = NinjaAPI(
 )
 
 
-# Add routers for each app
-api.add_router("/users", users_router, tags=["users"])
-
-
-
 # Global exception handler
 @api.exception_handler(Exception)
 def handle_exception(request, exc):
@@ -41,10 +36,12 @@ def handle_exception(request, exc):
         status=500
     )
 
-# health check endpoint
 @api.get("/health", auth=None)
 def health_check(request):
     """
     Health check endpoint to verify API is running
     """
     return {"status": "ok", "message": "API is running"}
+
+# Add routers for each app
+api.add_router("/users", users_router, tags=["users"])

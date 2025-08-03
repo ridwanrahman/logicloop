@@ -4,8 +4,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from typing import List
 
-from .schemas import UserSchema, UserProfileSchema
-from .models import UserProfile
+from .schemas import UserSchema
 
 User = get_user_model()
 router = Router()
