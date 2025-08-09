@@ -23,6 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 APPS_DIR = BASE_DIR / 'apps'
 TEMPLATES_DIR = BASE_DIR / 'frontend' / 'templates'
 STATIC_DIR = BASE_DIR / 'frontend' / 'static'
+PROJECT_NAME=os.environ.get('PROJECT_NAME')
 # Add the apps directory to Python path
 sys.path.insert(0, str(BASE_DIR / 'apps'))
 
