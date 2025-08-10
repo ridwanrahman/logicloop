@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from src2.apps.common.models import TimestampedModel
+from tmp_src2.apps.common.models import TimestampedModel
 
 User = get_user_model()
 
