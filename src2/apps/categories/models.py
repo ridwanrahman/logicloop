@@ -1,5 +1,5 @@
 from django.db import models
-from src.apps.common.models import TimestampedModel
+from src2.apps.common.models import TimestampedModel
 
 
 class Category(TimestampedModel):

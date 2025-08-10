@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from src.apps.common.models import TimestampedModel
+from src2.apps.common.models import TimestampedModel
 
 
 class User(AbstractUser):

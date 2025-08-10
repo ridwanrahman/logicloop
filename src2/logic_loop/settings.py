@@ -9,26 +9,45 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
+from django.conf.global_settings import CSRF_TRUSTED_ORIGINS
+from dotenv import load_dotenv
 
+load_dotenv()
+
+import os
+import sys
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+print(BASE_DIR)
+# APPS_DIR = BASE_DIR / 'apps'
+# TEMPLATES_DIR = BASE_DIR / 'frontend' / 'templates'
+# STATIC_DIR = BASE_DIR / 'frontend' / 'static'
+# PROJECT_NAME=os.environ.get('PROJECT_NAME')
+# Add the apps directory to Python path
+# sys.path.insert(0, str(BASE_DIR / 'apps'))
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-_jk5%z8+af4*=c_lncvywa7kvmt)qjfu8wl$)zlw2oz1s%925n'
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DJANGO_DEBUG")
 
 ALLOWED_HOSTS = [
-    ".railway.app",
+    ".railway.app"
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.railway.app",
+]
+
+if DEBUG:
+    ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -39,7 +58,24 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # third party apps
+    # 'django-htmx',
+
+    # local apps
+    'ninja',
+    'users',
+    'questions',
+    'submissions',
+    'categories',
+    'progress',
+    'discussion',
+    'common',
 ]
+
+# Custom user model - This is the key line you need!
+AUTH_USER_MODEL = 'users.User'
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -47,6 +83,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django_htmx.middleware.HtmxMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -56,7 +93,7 @@ ROOT_URLCONF = 'logic_loop.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'frontend' / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -117,6 +154,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [
+    BASE_DIR / 'frontend' / 'static',
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
