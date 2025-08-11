@@ -15,12 +15,12 @@ from django.contrib.auth import get_user_model
 from faker import Faker
 
 # Import your models here
-from users.models import UserProfile
-from categories.models import Category, Tag
-from questions.models import Difficulty, Question, TestCase, QuestionExample
-from submissions.models import Submission, SubmissionResult
-from progress.models import UserProgress, Achievement, UserAchievement
-from discussion.models import Discussion, DiscussionReply, Vote
+from src.apps.users.models import UserProfile
+from src.apps.categories.models import Category, Tag
+from src.apps.submissions.models import Submission, SubmissionResult
+from src.apps.questions.models import Difficulty, Question, TestCase, QuestionExample
+from src.apps.progress.models import UserProgress, Achievement, UserAchievement
+from src.apps.discussion.models import Discussion, DiscussionReply, Vote
 
 fake = Faker()
 User = get_user_model()
