@@ -7,4 +7,5 @@ def health_check(request):
 
 
 def show_homepage(request):
+    print("hskfkds")
     return render(request, "pages/hello-world.html", {})
