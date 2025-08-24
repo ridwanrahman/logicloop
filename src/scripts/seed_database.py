@@ -7,25 +7,27 @@ Usage:
     OR
     python manage.py runscript seed_database  $ if using django-extensions
 """
-
+import os
+import sys
 import random
 from django.utils import timezone
 from django.utils.text import slugify
 from django.contrib.auth import get_user_model
 from faker import Faker
+from pathlib import Path
 
 # Import your models here
-from src.apps.users.models import UserProfile
-from src.apps.categories.models import Category, Tag
-from src.apps.submissions.models import Submission, SubmissionResult
-from src.apps.questions.models import Difficulty, Question, TestCase, QuestionExample
-from src.apps.progress.models import UserProgress, Achievement, UserAchievement
-from src.apps.discussion.models import Discussion, DiscussionReply, Vote
+from users.models import UserProfile
+from categories.models import Category, Tag
+from submissions.models import Submission, SubmissionResult
+from users.models import User
+from questions.models import Difficulty, Question, TestCase, QuestionExample
+from progress.models import UserProgress, Achievement, UserAchievement
+from discussion.models import Discussion, DiscussionReply, Vote
 
 fake = Faker()
-User = get_user_model()
-
-# Sample data constants
+# User = get_user_model()
+# # Sample data constants
 PROGRAMMING_LANGUAGES = [
     'python', 'java', 'cpp', 'c', 'javascript', 'go', 'rust'
 ]
@@ -40,7 +42,6 @@ SAMPLE_CODE_SOLUTIONS = {
             return [num_map[complement], i]
         num_map[num] = i
     return []''',
-
     'java': '''public int[] twoSum(int[] nums, int target) {
     Map<Integer, Integer> map = new HashMap<>();
     for (int i = 0; i < nums.length; i++) {
@@ -255,23 +256,21 @@ You can return the answer in any order.''',
 
 
 def create_users(count=50):
-    """Create mock users"""
+    print("🧹 Cleaning User table...")
+    User.objects.all().delete()
+
     print(f"👥 Creating {count} users...")
-
     users = []
-
     # Create admin user
     admin = User.objects.create_superuser(
-        username='admin',
-        email='admin@codeforge.com',
-        password='admin123',
+        username='ridwan',
+        email='ridwan@test.com',
+        password='ridwan',
         first_name='Admin',
         last_name='User',
         total_points=0,
         problems_solved=0
     )
-    users.append(admin)
-
     # Create admin profile
     UserProfile.objects.create(
         user=admin,
@@ -281,6 +280,7 @@ def create_users(count=50):
         website='https://logic_loop.com',
         is_public=True
     )
+    users.append(admin)
 
     # Create regular users
     for i in range(count - 1):
@@ -319,6 +319,10 @@ def create_users(count=50):
 
 def create_difficulties():
     """Create difficulty levels"""
+    # remove from db
+    print("🧹 Cleaning Difficulty table...")
+    Difficulty.objects.all().delete()
+
     print("📊 Creating difficulty levels...")
 
     difficulties = [
@@ -338,6 +342,11 @@ def create_difficulties():
 
 def create_categories_and_tags():
     """Create categories and tags"""
+    print("🧹 Cleaning Category table...")
+    Category.objects.all().delete()
+    print("🧹 Cleaning Tag table...")
+    Tag.objects.all().delete()
+
     print("🏷️  Creating categories and tags...")
 
     # Create categories
@@ -365,10 +374,14 @@ def create_categories_and_tags():
 
 def create_questions(categories, tags, difficulties, users):
     """Create questions with examples and test cases"""
+    print("🧹 Cleaning questions table...")
+    Question.objects.all().delete()
+    print("🧹 Cleaning test case table...")
+    TestCase.objects.all().delete()
+
+
     print("❓ Creating questions...")
-
     questions = []
-
     # Create predefined questions
     for q_data in QUESTIONS_DATA:
         category = next(c for c in categories if c.name == q_data['category'])
@@ -464,10 +477,11 @@ def create_questions(categories, tags, difficulties, users):
 
 def create_submissions(users, questions):
     """Create submissions and results"""
+    print("🧹 Cleaning submissions table...")
+    Submission.objects.all().delete()
+
     print("📝 Creating submissions...")
-
     submissions = []
-
     for user in random.sample(users, min(30, len(users))):  # 30 random users
         user_questions = random.sample(questions, random.randint(1, 15))
 
@@ -525,10 +539,11 @@ def create_submissions(users, questions):
 
 def create_user_progress(users, questions, submissions):
     """Create user progress tracking"""
+    print("🧹 Cleaning userprogress table...")
+    UserProgress.objects.all().delete()
+
     print("📈 Creating user progress...")
-
     progress_records = []
-
     for user in users:
         user_submissions = [s for s in submissions if s.user == user]
         attempted_questions = list(set([s.question for s in user_submissions]))
@@ -569,8 +584,12 @@ def create_user_progress(users, questions, submissions):
 
 def create_achievements(users):
     """Create achievements and user achievements"""
-    print("🏆 Creating achievements...")
+    print("🧹 Cleaning achievements table...")
+    Achievement.objects.all().delete()
+    print("🧹 Cleaning Userachievements table...")
+    UserAchievement.objects.all().delete()
 
+    print("🏆 Creating achievements...")
     achievements = [
         {
             'name': 'First Steps',
@@ -640,11 +659,16 @@ def create_achievements(users):
 
 def create_discussions(users, questions):
     """Create discussions and replies"""
-    print("💬 Creating discussions...")
+    print("🧹 Cleaning discussions table...")
+    Discussion.objects.all().delete()
+    print("🧹 Cleaning DiscussionReply table...")
+    DiscussionReply.objects.all().delete()
+    print("🧹 Cleaning Vote table...")
+    Vote.objects.all().delete()
 
+    print("💬 Creating discussions...")
     discussions = []
     replies = []
-
     # Create discussions for random questions
     sample_questions = random.sample(questions, min(15, len(questions)))
 
@@ -690,7 +714,6 @@ def create_discussions(users, questions):
     return discussions, replies
 
 
-
 users = create_users()
 difficulties = create_difficulties()
 categories, tags = create_categories_and_tags()
@@ -699,3 +722,28 @@ submissions = create_submissions(users, questions)
 user_progress = create_user_progress(users, questions, submissions)
 created_achievements, user_achievements = create_achievements(users)
 discussions, replies = create_discussions(users, questions)
+
+# if __name__ == "__main__":
+#     print("inside main")
+#     import os
+#     import sys
+#     import django
+#     from pathlib import Path
+#
+#     # Add the src directory to Python path
+#     BASE_DIR = Path(__file__).resolve().parent.parent
+#     sys.path.append(str(BASE_DIR))
+#
+#     # Set up Django environment
+#     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'logic_loop.settings')
+#     django.setup()
+#
+#     # Now you can import your Django models
+#     from users.models import User
+#     from questions.models import Difficulty
+#     users = create_users()
+#
+#     difficulties = create_difficulties()
+
+
+    

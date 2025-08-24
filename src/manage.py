@@ -7,6 +7,12 @@ import sys
 def main():
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'logic_loop.settings')
+
+    # Add src to Python path
+    sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
+    # BASE_DIR = os.getcwd()
+    # APPS_DIR = os.path.join(BASE_DIR, 'apps')
+    # sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
