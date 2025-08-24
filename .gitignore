@@ -3,6 +3,8 @@
 .idea/
 .DS_Store
 logic-loopvenv/
+
+src/frontend/staticfiles
 # Django specific
 *.log
 *.pot
