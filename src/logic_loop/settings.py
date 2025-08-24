@@ -31,9 +31,11 @@ SECRET_KEY = 'django-insecure-_jk5%z8+af4*=c_lncvywa7kvmt)qjfu8wl$)zlw2oz1s%925n
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    ".railway.app",
+    "https://*.railway.app",
 ]
-
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.railway.app",
+]
 if DEBUG:
     ALLOWED_HOSTS = ['*']
 AUTH_USER_MODEL = 'users.User'
