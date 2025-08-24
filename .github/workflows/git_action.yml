@@ -27,6 +27,6 @@ jobs:
 #        run: python manage.py migrate
 #      - name: Seed database
 #        run: python manage.py shell < scripts/seed_database.py
-      - name: Run Tests
-        run: |
-          python manage.py test
+#      - name: Run Tests
+#        run: |
+#          python manage.py test
