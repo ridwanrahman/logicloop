@@ -7,11 +7,27 @@
     </head>
     <body>
       <h1>Users</h1>
-      <ul>
-        {% for user in users %}
-          <li>{{ user.email }}</li>
-        {% endfor %}
-      </ul>
+      <button hx-get="http://localhost:8000/api/users"
+              hx-trigger="click delay:500ms"
+              hx-target="#content"
+      >
+          Load Data
+      </button>
+      <div id="content">
+
+      </div>
+
+{#      <ul>#}
+{#        {% for user in users %}#}
+{#          <li>{{ user.email }}</li>#}
+{#        {% endfor %}#}
+{#      </ul>#}
     </body>
+
+<script src="https://unpkg.com/htmx.org@2.0.2"
+        integrity="sha384-Y7hw+L/jvKeWIRRkqWYfPcvVxHzVzn5REgzbawhxAuQGwX1XWe70vji+VSeHOThJ"
+        crossorigin="anonymous">
+
+</script>
 
 </html>
