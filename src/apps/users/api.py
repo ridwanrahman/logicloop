@@ -16,3 +16,7 @@ def list_users(request):
     List all users with pagination.
     """
     return User.objects.all()
+
+@router.post("/add_user")
+def add_user(request, data):
+    return f"Hello {data.name}"
