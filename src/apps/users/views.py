@@ -9,3 +9,6 @@ def show_all_users(request):
         "users": users
     }
     return render(request, "pages/all-users.html", users_dict)
+
+def example_view(request):
+    return render(request, "pages/example.html")

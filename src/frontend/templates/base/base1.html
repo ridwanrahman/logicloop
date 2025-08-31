@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewpoint" content="width=device-width, initial-scale=1.0">
+        <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+        <link href="https://unpkg.com/leaflet/dist/leaflet.css" rel="stylesheet"/>
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.0/dist/tailwind.min.css" rel="stylesheet"/>
+        <title>Djangocourse</title>
+    </head>
+<!--    <body>-->
+<!--        <nav>Common navbar for all templates</nav>-->
+<!--        {% block content %}-->
+<!--        {% endblock content %}-->
+<!--        kjsflkdjs-->
+<!--        <footer>Common footer for all templates</footer>-->
+<!--    </body>-->
+    <body class="bg-black-100 p-4">
+        <div id="app" class="max-w-4xl mx-auto">
+            <h1 class="text-2xl font-bold mb-4">My Geolocation App</h1>
+
+            <div id="map"></div>
+            <button hx-get="/markers" hx-target="#map" hx-trigger="click">Load Markers</button>
+        </div>
+    </body>
+    <script>
+
+    </script>
+</html>
